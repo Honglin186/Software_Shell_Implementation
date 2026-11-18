@@ -42,6 +42,28 @@ void parse_command(char line[], char *args[], int *argsc)
     args[*argsc] = NULL; ///args must be null terminated
 }
 
+//returns 1 if the command contains a redirection operator (>, >> or <)
+int command_with_redirection(char line[])
+{
+    if (strchr(line, '>') != NULL || strchr(line, '<') != NULL) {
+        return 1;
+    }
+    return 0;
+}
+
+///Returns the index of the redirection operator in args, or -1 if none
+int find_redirection(char *args[], int argsc)
+{
+    for (int i = 0; i < argsc; i++) {
+        if (strcmp(args[i], ">") == 0 ||
+            strcmp(args[i], "<") == 0 ||
+            strcmp(args[i], ">>") == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 ///Launch related functions
 void child(char *args[], int argsc)
 {
@@ -85,4 +107,8 @@ void launch_program(char *args[], int argsc)
     ///Handle the 'exit' command;
     ///so that the shell, not the child process,
     ///exits.
+}
+
+void launch_program_with_redirection(char *args[], int argsc)
+{
 }
